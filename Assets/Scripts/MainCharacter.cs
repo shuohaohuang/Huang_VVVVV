@@ -12,10 +12,19 @@ public class MainCharacter : MonoBehaviour
     private float gravity;
 
     [SerializeField]
-    private float speed;
+    private float runSpeed;
+    [SerializeField]
+    private float ySpeed;
+
+    private bool yAct = true;
+    public static MainCharacter mainCharacter;
+    private void Awake()
+    {
+        DontDestroyOnLoad(this);
+    }
     void Start()
     {
-        
+        mainCharacter = this;
     }
 
     // Update is called once per frame
@@ -26,18 +35,29 @@ public class MainCharacter : MonoBehaviour
         
         if (horizontal != 0)
         {
-            Character.position= transform.position+new Vector3(speed*horizontal*0.02f,0,0);
+            Character.position= transform.position+new Vector3(runSpeed * horizontal*0.02f,0,0);
         }
-        if (vertical > 0) 
+        if (yAct)
         {
-           Character.velocity= new Vector3(0,speed,0);
+            if (vertical > 0)
+            {
+                Character.velocity = new Vector3(0, ySpeed, 0);
+                yAct = false;
+            }
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                Character.gravityScale = -Character.gravityScale;
+                Character.transform.Rotate(180, 0, 0);
+                ySpeed = -ySpeed;
+                yAct = false;
+            }
         }
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            Character.gravityScale=-Character.gravityScale;
-            Character.transform.Rotate(180, 0, 0);
-            speed = -speed;
-        }
-        
+
     }
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        yAct = true;
+        Debug.Log(0);
+    }
+
 }
