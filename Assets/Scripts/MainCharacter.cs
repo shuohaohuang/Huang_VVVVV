@@ -10,22 +10,29 @@ public class MainCharacter : MonoBehaviour
     private float horizontal;
     private float vertical;
     private float gravity;
-
+    RaycastHit2D hit;
     [SerializeField]
     private float runSpeed;
     [SerializeField]
     private float ySpeed;
 
     private bool yAct = true;
-    public static MainCharacter mainCharacter;
+    public static MainCharacter instance;
     private void Awake()
     {
-        DontDestroyOnLoad(this);
+        if (MainCharacter.instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(this);
+
+        }
+        else 
+        {
+            Destroy(gameObject);Debug.Log('d');
+        }
+
     }
-    void Start()
-    {
-        mainCharacter = this;
-    }
+
 
     // Update is called once per frame
     void Update()
@@ -52,12 +59,14 @@ public class MainCharacter : MonoBehaviour
                 yAct = false;
             }
         }
+        hit = Physics2D.Raycast(transform.position, -transform.up, 1);
+        Debug.DrawRay(transform.position, transform.position - transform.up * 1, Color.red);
+        if(hit.collider != null)
+            yAct = true;
 
     }
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        yAct = true;
-        Debug.Log(0);
     }
 
 }

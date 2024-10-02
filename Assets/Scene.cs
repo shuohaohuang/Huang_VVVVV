@@ -18,9 +18,11 @@ public class Scene : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D collision)
     {
         Debug.Log("cfcc");
-        if (collision == MainCharacter.mainCharacter)
+        SceneManager.LoadScene("w");
+
+        if (collision == MainCharacter.instance)
+        if (collision == MainCharacter.instance)
         {
-            SceneManager.LoadScene("w");
             Debug.Log("cfcc");
 
         }
